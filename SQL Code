@@ -1,0 +1,40 @@
+Drop Table IF EXISTS Bourbon;
+
+Create Table Bourbon (
+  Name varchar(200),
+  Proof integer(20));
+  
+  Insert into Bourbon (Name, Proof)
+  Values
+  ('Buffalo Trace','.95'),
+  ('Blantons','.9'),
+  ('High Proof','1'),
+  ('Old Forestor 1910','.94'),
+  ('Low Proof','.7');
+
+Drop Table IF EXISTS Distilleries;
+
+Create Table Distilleries (
+  Distiller_Name varchar(200), 
+  Address varchar(200),
+  Bourbon_Name varchar(200));
+
+Insert into Distilleries (Distiller_Name, Address, Bourbon_Name)
+Values 
+('Buffalo Trace','1 Buffalo Trace','Buffalo Trace'),
+('Buffalo Trace','1 Buffalo Trace','Blantons'),
+('HP Distillers','123 Distillers way','High Proof'),
+('Brown Forman','Brown Forman 123','Old Forestor 1910');
+
+SELECT 
+Bourbon.Name,
+Proof,
+COALESCE(Distiller_name,'n/a') AS 'Dstiller Name',
+COALESCE(Address,'n/a') as 'Address',
+CASE WHEN Proof >.99 THEN 'High Proof Whiskey' 
+WHEN Proof <=.7 THEN 'Low Proof Whiskey' 
+ELSE 'Medium Proof Whiskey'  
+END AS 'Proof Level'
+FROM Bourbon
+LEFT JOIN Distilleries 
+ON Distilleries.Bourbon_Name = Bourbon.Name;
